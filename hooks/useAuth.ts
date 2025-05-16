@@ -1,11 +1,14 @@
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
-import { Route } from "@/lib/routes";
+import { Route } from "@/types/routes";
 import { deleteCookie, setCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { UserData } from "@/types/auth";
 
 export const useAuth = () => {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState<UserData | null>(null);
 
   const register = async (formData: FormData, reset: () => void) => {
     await axiosInstance.post("auth/register", formData);
@@ -27,8 +30,6 @@ export const useAuth = () => {
       secure: true,
     });
 
-    toast.success("Login successful!");
-
     router.push(Route.Dashboard);
 
     reset();
@@ -41,9 +42,31 @@ export const useAuth = () => {
     router.push(Route.Login);
   };
 
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get("auth/user");
+      const userData = response.data;
+
+      setUserInfo({
+        email: userData.user.email,
+        firstName: userData.user.firstname,
+        lastName: userData.user.lastname,
+      });
+    } catch {
+      setUserInfo(null);
+      router.push(Route.Login);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
   return {
     register,
     login,
     logout,
+    fetchUser,
+    userInfo,
   };
 };

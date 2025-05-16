@@ -1,17 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/lib/useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import { RegisterData } from "@/types/auth";
 import React from "react";
 import { useForm } from "react-hook-form";
-
-export type RegisterData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 const RegisterPage = () => {
   const {

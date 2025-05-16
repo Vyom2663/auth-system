@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import LoginPage from "@/app/(noAuth)/login/login-form";
 import Link from "next/link";
 import Loading from "@/app/loading";
-import { Route } from "@/lib/routes";
+import { Route } from "@/types/routes";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next/client";
 

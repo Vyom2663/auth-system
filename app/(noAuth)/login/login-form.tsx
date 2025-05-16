@@ -3,12 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/lib/useAuth";
-
-export type LoginData = {
-  email: string;
-  password: string;
-};
+import { useAuth } from "@/hooks/useAuth";
+import { LoginData } from "@/types/auth";
 
 const LoginPage = () => {
   const {
