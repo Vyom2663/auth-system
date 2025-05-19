@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { hasCookie } from "cookies-next/client";
 import {
   Card,
   CardContent,
@@ -16,13 +15,14 @@ import { Route } from "@/types/routes";
 import Loading from "@/app/loading";
 import { useAuth } from "@/hooks/useAuth";
 import { SkeletonCard } from "@/app/(auth)/dashboard/skeletan-card";
+import { getToken } from "@/hooks/cookie";
 
 const Dashboard = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = hasCookie("token");
+    const token = getToken();
     if (!token) {
       router.push(Route.Login);
       return;

@@ -43,7 +43,8 @@ axiosInstance.interceptors.response.use(
     } else if (status === 404) {
       toast.error(error?.message);
     } else {
-      toast.info("Secure access required. Please log in to your account.");
+      // toast.info("Secure access required. Please log in to your account.");
+      console.log(error);
     }
 
     return Promise.reject(error);

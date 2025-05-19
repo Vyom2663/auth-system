@@ -6,14 +6,14 @@ import Link from "next/link";
 import Loading from "@/app/loading";
 import { Route } from "@/types/routes";
 import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next/client";
+import { getToken } from "@/hooks/cookie";
 
 const Page = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = getCookie("token");
+    const token = getToken();
     if (token) {
       router.replace(Route.Dashboard);
     }

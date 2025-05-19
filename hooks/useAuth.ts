@@ -1,10 +1,9 @@
 import axiosInstance from "@/lib/axios";
-import { toast } from "react-toastify";
 import { Route } from "@/types/routes";
-import { deleteCookie, setCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { UserData } from "@/types/auth";
+import { deleteToken, setToken } from "@/hooks/cookie";
 
 export const useAuth = () => {
   const router = useRouter();
@@ -12,8 +11,6 @@ export const useAuth = () => {
 
   const register = async (formData: FormData, reset: () => void) => {
     await axiosInstance.post("auth/register", formData);
-
-    toast.success("Registered successfully!");
 
     await login(formData, reset);
 
@@ -25,10 +22,7 @@ export const useAuth = () => {
 
     const { token } = response.data;
 
-    setCookie("token", token, {
-      maxAge: 60 * 60 * 24,
-      secure: true,
-    });
+    setToken(token);
 
     router.push(Route.Dashboard);
 
@@ -37,8 +31,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     await axiosInstance.post("auth/logout");
-    deleteCookie("token");
-    toast.success("Logout successfully done!!");
+    deleteToken();
     router.push(Route.Login);
   };
 
@@ -54,9 +47,8 @@ export const useAuth = () => {
       });
     } catch {
       setUserInfo(null);
-      router.push(Route.Login);
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     fetchUser();

@@ -5,8 +5,8 @@ import RegisterPage from "@/app/(noAuth)/register/register-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Route } from "@/types/routes";
-import { hasCookie } from "cookies-next/client";
 import Loading from "@/app/loading";
+import { getToken } from "@/hooks/cookie";
 
 const Page = () => {
 
@@ -14,7 +14,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = hasCookie("token");
+    const token = getToken();
     if (token) {
       router.push(Route.Dashboard);
     }
