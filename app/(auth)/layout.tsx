@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "../globals.css";
 
 import { AppSidebar } from "@/components/layouts/app-sidebar";
@@ -12,19 +11,23 @@ import { Toaster } from "sonner";
 import { Suspense } from "react";
 import BreadcrumbNav from "@/components/layouts/breadcrump-nav";
 import LogoutBtnNav from "@/components/layouts/logoutBtn-nav";
+import { fetchUserRepository } from "@/repository/fetchUserRepository";
+import InitializeUser from "@/app/(auth)/user-initialize";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Auth System App",
-  description: "Authentication overview",
-};
-
-export default function RootLayout({
+export default async function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await fetchUserRepository();
+
+  if(!user){
+    redirect("/login")
+  }
+
   return (
-    <div className="bg-gray-100">
+    <>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
@@ -43,11 +46,13 @@ export default function RootLayout({
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 md:p-8 pt-8">
-            {children}
-            <Toaster richColors position="bottom-right" />
+            <InitializeUser user={user}>
+              {children}
+              <Toaster richColors position="bottom-right" />
+            </InitializeUser>
           </div>
         </SidebarInset>
       </SidebarProvider>
-    </div>
+    </>
   );
 }

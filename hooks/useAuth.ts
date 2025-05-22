@@ -1,13 +1,13 @@
 import axiosInstance from "@/lib/axios";
 import { Route } from "@/types/routes";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { UserData } from "@/types/auth";
-import { deleteToken, setToken } from "@/hooks/cookie";
+import authStore from "@/stores/user-store";
+import { removeToken, setToken } from "@/lib/cookie";
 
 export const useAuth = () => {
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState<UserData | null>(null);
+  const setUserInStore = authStore.getState().setUser;
+
 
   const register = async (formData: FormData, reset: () => void) => {
     await axiosInstance.post("auth/register", formData);
@@ -22,7 +22,9 @@ export const useAuth = () => {
 
     const { token } = response.data;
 
-    setToken(token);
+    setToken("token", token);
+
+    await fetchUser();
 
     router.push(Route.Dashboard);
 
@@ -31,34 +33,28 @@ export const useAuth = () => {
 
   const logout = async () => {
     await axiosInstance.post("auth/logout");
-    deleteToken();
+
+    removeToken("token");
+
+    authStore.setState({ user: null });
+
     router.push(Route.Login);
   };
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get("auth/user");
-      const userData = response.data;
+  const fetchUser = async () => {
+    const response = await axiosInstance.get("auth/user");
 
-      setUserInfo({
-        email: userData.user.email,
-        firstName: userData.user.firstname,
-        lastName: userData.user.lastname,
-      });
-    } catch {
-      setUserInfo(null);
-    }
-  }, []);
+    const user = response.data.user;
 
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+    setUserInStore(user); 
+
+  };
 
   return {
     register,
     login,
     logout,
     fetchUser,
-    userInfo,
+    isLoggedIn: Boolean(authStore.getState().user),
   };
 };

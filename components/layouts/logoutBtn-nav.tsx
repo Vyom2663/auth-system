@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth"
 import { LogOut } from "lucide-react";
+import authStore from "@/stores/user-store";
 
 const LogoutBtnNav = () => {
   const { logout } = useAuth();
@@ -12,14 +13,14 @@ const LogoutBtnNav = () => {
     await logout();
   };
 
-  const { userInfo } = useAuth();
+  const user = authStore((state) => state.user);
 
   return (
     <div>
       <div className="flex items-center gap-4">
-        {userInfo?.firstName && (
+        {user?.firstname && (
           <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white text-blue-700 font-semibold text-sm">
-            {userInfo?.firstName.charAt(0).toUpperCase()}
+            {user?.firstname.charAt(0).toUpperCase()}
           </div>
         )}
         <Button

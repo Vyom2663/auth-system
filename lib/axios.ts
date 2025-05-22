@@ -1,15 +1,17 @@
+
 import axios from "axios";
-import { getCookie } from "cookies-next/client";
 import { toast } from "sonner";
+import { getServerToken } from "@/lib/server-cookie";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = getCookie("token");
+axiosInstance.interceptors.request.use(async (config) => {
+  const token = await getServerToken("token");
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`
   }
   config.headers.Accept = `application/json`;
   config.headers["Content-Type"] = "multipart/form-data";
@@ -44,7 +46,7 @@ axiosInstance.interceptors.response.use(
       toast.error(error?.message);
     } else {
       // toast.info("Secure access required. Please log in to your account.");
-      console.log(error);
+      // console.log(error);
     }
 
     return Promise.reject(error);

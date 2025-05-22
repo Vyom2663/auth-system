@@ -1,30 +1,10 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import RegisterPage from "@/app/(noAuth)/register/register-form";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Route } from "@/types/routes";
-import Loading from "@/app/loading";
-import { getToken } from "@/hooks/cookie";
 
 const Page = () => {
-
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      router.push(Route.Dashboard);
-    }
-    setLoading(false);
-  }, [router]);
-
-  if(loading){
-    return <Loading />
-  }
-
   return (
     <div>
       <div className="pl-0 pt-20 xl:py-10 2xl:py-20">

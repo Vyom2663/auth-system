@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function NavMain({
   items,
@@ -44,11 +45,13 @@ export function NavMain({
                 className={isActive ? "bg-blue-500 text-white rounded-3xl" : ""}
               >
                 <CollapsibleTrigger asChild>
+                <Link href={item.url}>
                   <SidebarMenuButton tooltip={item.title}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                     {/* <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" /> */}
                   </SidebarMenuButton>
+                  </Link>
                 </CollapsibleTrigger>
                 {/* <CollapsibleContent>
                 <SidebarMenuSub>
