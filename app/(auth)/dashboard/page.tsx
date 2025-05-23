@@ -12,9 +12,27 @@ import {
 import { Label } from "@/components/ui/label";
 import { SkeletonCard } from "@/app/(auth)/dashboard/skeletan-card";
 import authStore from "@/stores/user-store";
+// import { Route } from "@/types/routes";
+// import { useRouter } from "next/navigation";
+// import Loading from "@/app/loading";
 
 const Dashboard = () => {
+  // const router = useRouter();
   const userInfo = authStore((state) => state.user);
+  console.log(userInfo);
+  
+  // const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   if (userInfo && !userInfo.email_verified_at) {
+  //     router.replace(Route.EMAIL_VERIFY_PAGE);
+  //   }
+  //   setLoading(false);
+  // }, [userInfo, router]);
+
+  // if(loading){
+  //   return <Loading />
+  // }
 
   return (
     <div>

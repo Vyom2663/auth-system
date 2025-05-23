@@ -8,7 +8,6 @@ export const useAuth = () => {
   const router = useRouter();
   const setUserInStore = authStore.getState().setUser;
 
-
   const register = async (formData: FormData, reset: () => void) => {
     await axiosInstance.post("auth/register", formData);
 
@@ -26,7 +25,7 @@ export const useAuth = () => {
 
     await fetchUser();
 
-    router.push(Route.Dashboard);
+    router.push(Route.DASHBOARD_PAGE);
 
     reset();
   };
@@ -38,7 +37,7 @@ export const useAuth = () => {
 
     authStore.setState({ user: null });
 
-    router.push(Route.Login);
+    router.push(Route.LOGIN_PAGE);
   };
 
   const fetchUser = async () => {
@@ -46,8 +45,19 @@ export const useAuth = () => {
 
     const user = response.data.user;
 
-    setUserInStore(user); 
+    if (user.email_verified_at) {
+      setUserInStore(user);
+    }
+  };
 
+  const verifyEmail = async (url: string) => {
+    await axiosInstance.get(url);
+
+    router.push(Route.DASHBOARD_PAGE);
+  };
+
+  const resendEmail = async () => {
+    await axiosInstance.post("auth/email/verify/resend");
   };
 
   return {
@@ -55,6 +65,8 @@ export const useAuth = () => {
     login,
     logout,
     fetchUser,
+    verifyEmail,
+    resendEmail,
     isLoggedIn: Boolean(authStore.getState().user),
   };
 };

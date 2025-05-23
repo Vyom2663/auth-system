@@ -15,6 +15,7 @@ const routes: {
 } = {
   "/": { title: "Dashboard" },
   "/dashboard": { title: "Dashboard" },
+  "/email-verify": { title: "Resend Email" },
 //   "/personal-information/basic-details": {
 //     title: "Basic Details",
 //     parent: "Personal Information",

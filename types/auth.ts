@@ -3,6 +3,7 @@ export type UserData = {
   email: string | null;
   firstname: string | null;
   lastname: string | null;
+  email_verified_at : string | null;
 };
 
 export type LoginData = {

@@ -1,5 +1,3 @@
-import "../globals.css";
-
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -7,8 +5,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Toaster } from "sonner";
-import { Suspense } from "react";
 import BreadcrumbNav from "@/components/layouts/breadcrump-nav";
 import LogoutBtnNav from "@/components/layouts/logoutBtn-nav";
 import { fetchUserRepository } from "@/repository/fetchUserRepository";
@@ -22,8 +18,12 @@ export default async function AuthLayout({
 }>) {
   const user = await fetchUserRepository();
 
-  if(!user){
-    redirect("/login")
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (!user.email_verified_at) {
+    redirect("/account/verify");
   }
 
   return (
@@ -35,20 +35,15 @@ export default async function AuthLayout({
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1 cursor-pointer" />
               <Separator orientation="vertical" className="mr-2 h-4" />
-              <Suspense fallback={<div>Loading breadcrumbs...</div>}>
-                <BreadcrumbNav />
-              </Suspense>
+              <BreadcrumbNav />
             </div>
             <div className="mr-5">
-              <Suspense fallback={null}>
-                <LogoutBtnNav />
-              </Suspense>
+              <LogoutBtnNav />
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 md:p-8 pt-8">
             <InitializeUser user={user}>
               {children}
-              <Toaster richColors position="bottom-right" />
             </InitializeUser>
           </div>
         </SidebarInset>

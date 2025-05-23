@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-gray-100">
         {children}
-        <Toaster richColors position="bottom-right" />
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 export const Route = {
-    Login : "/login",
-    Register : "/register",
-    Dashboard : "/dashboard"
+    LOGIN_PAGE : "/login",
+    REGISTER_PAGE : "/register",
+    DASHBOARD_PAGE : "/dashboard",
+    EMAIL_VERIFY_PAGE : "/account/verify"
 }
