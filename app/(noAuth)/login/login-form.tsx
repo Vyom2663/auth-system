@@ -5,6 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginData } from "@/types/auth";
+import Link from "next/link";
 
 const LoginPage = () => {
   const {
@@ -14,7 +15,7 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<LoginData>();
 
-  const {login : loginUser } = useAuth();
+  const { login: loginUser } = useAuth();
 
   const onSubmit = async (data: LoginData) => {
     const formData = new FormData();
@@ -73,6 +74,12 @@ const LoginPage = () => {
       >
         Log In
       </Button>
+
+      <Link href="/forgot-password">
+        <p className="flex font-semibold dark:text-white text-blkcol dark:hover:text-blue-500 hover:text-blue-500 justify-center">
+          Forgot your Password?
+        </p>
+      </Link>
     </form>
   );
 };

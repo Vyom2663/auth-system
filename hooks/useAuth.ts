@@ -9,55 +9,83 @@ export const useAuth = () => {
   const setUserInStore = authStore.getState().setUser;
 
   const register = async (formData: FormData, reset: () => void) => {
-    await axiosInstance.post("auth/register", formData);
+    try {
+      await axiosInstance.post("/auth/register", formData);
 
-    await login(formData, reset);
+      await login(formData, reset);
 
-    reset();
+      reset();
+    } catch {}
   };
 
   const login = async (formData: FormData, reset: () => void) => {
-    const response = await axiosInstance.post("auth/login", formData);
+    try {
+      const response = await axiosInstance.post("/auth/login", formData);
 
-    const { token } = response.data;
+      const { token } = response.data;
 
-    setToken("token", token);
+      setToken("token", token);
 
-    await fetchUser();
+      await fetchUser();
 
-    router.push(Route.DASHBOARD_PAGE);
+      router.push(Route.DASHBOARD_PAGE);
 
-    reset();
+      reset();
+    } catch {}
   };
 
   const logout = async () => {
-    await axiosInstance.post("auth/logout");
+    try {
+      await axiosInstance.post("/auth/logout");
 
-    removeToken("token");
+      removeToken("token");
 
-    authStore.setState({ user: null });
+      authStore.setState({ user: null });
 
-    router.push(Route.LOGIN_PAGE);
+      router.push(Route.LOGIN_PAGE);
+    } catch {}
   };
 
   const fetchUser = async () => {
-    const response = await axiosInstance.get("auth/user");
+    try {
+      const response = await axiosInstance.get("/auth/user");
 
-    const user = response.data.user;
+      const user = response.data.user;
 
-    if (user.email_verified_at) {
-      setUserInStore(user);
-    }
+      if (user.email_verified_at) {
+        setUserInStore(user);
+      }
+    } catch {}
   };
 
   const verifyEmail = async (url: string) => {
-    await axiosInstance.get(url);
+    try {
+      await axiosInstance.get(url);
 
-    router.push(Route.DASHBOARD_PAGE);
+      router.push(Route.DASHBOARD_PAGE);
+    } catch {}
   };
 
   const resendEmail = async () => {
-    await axiosInstance.post("auth/email/verify/resend");
+    try {
+      await axiosInstance.post("/auth/email/verify/resend");
+    } catch {}
+  };
+
+  const forgotPassword = async (formData : FormData) => {
+    try {
+      await axiosInstance.post("/auth/password/forgot",formData);
+      router.push(Route.LOGIN_PAGE);
+    } catch {}
+  };
+
+   const addCompany = async (formData : FormData) => {
+    try {
+      await axiosInstance.post("/company",formData);
+      router.push(Route.DASHBOARD_PAGE);
+    } catch(error) {
+      console.log(error);
+    }
   };
 
   return {
@@ -67,6 +95,7 @@ export const useAuth = () => {
     fetchUser,
     verifyEmail,
     resendEmail,
-    isLoggedIn: Boolean(authStore.getState().user),
+    forgotPassword,
+    addCompany,
   };
 };

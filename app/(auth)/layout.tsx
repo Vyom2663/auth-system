@@ -23,7 +23,11 @@ export default async function AuthLayout({
   }
 
   if (!user.email_verified_at) {
-    redirect("/account/verify");
+  redirect("/account/verify");
+  }
+
+  if(!user.company_id) {
+    redirect("/company");
   }
 
   return (
