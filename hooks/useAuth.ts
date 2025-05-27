@@ -92,8 +92,12 @@ export const useAuth = () => {
     try {
       await axiosInstance.post("/company", formData);
       router.push(Route.DASHBOARD_PAGE);
-    } catch (error) {
-      console.log(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.validationErrors) {
+        throw error.validationErrors;
+      }
+      throw error;
     }
   };
 

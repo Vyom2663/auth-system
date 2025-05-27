@@ -17,6 +17,8 @@ const RegisterPage = () => {
     { field: string; message: string }[]
   >([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const getServerError = (field: string) => {
     const error = serverErrors.find((err) => err.field === field);
     return error?.message;
@@ -24,6 +26,7 @@ const RegisterPage = () => {
 
   const onSubmit = async (data: RegisterData) => {
     setServerErrors([]);
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("firstname", data.firstname);
@@ -40,6 +43,7 @@ const RegisterPage = () => {
         setServerErrors(error);
       }
     }
+    setIsLoading(false);
   };
 
   return (
@@ -130,8 +134,13 @@ const RegisterPage = () => {
         <Button
           type="submit"
           className="border bg-blue-500 hover:bg-blue-950 text-white cursor-pointer"
+          disabled={isLoading}
         >
-          Submit
+          {isLoading ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          ) : (
+            "Register"
+          )}
         </Button>
       </div>
     </form>

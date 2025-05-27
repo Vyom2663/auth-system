@@ -5,6 +5,12 @@ export type UserData = {
     lastname: string | null;
     email_verified_at: string | null;
   };
+  company: Company[]; 
+};
+
+type Company = {
+  name: string;
+  logo_url: string;
 };
 
 export type LoginData = {

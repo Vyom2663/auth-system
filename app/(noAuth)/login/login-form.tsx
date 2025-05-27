@@ -18,8 +18,11 @@ const LoginPage = () => {
     { field: string; message: string }[]
   >([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async (data: LoginData) => {
     setServerErrors([]);
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
@@ -32,6 +35,7 @@ const LoginPage = () => {
         setServerErrors(error);
       }
     }
+    setIsLoading(false);
   };
 
   const getServerError = (field: string) => {
@@ -76,9 +80,14 @@ const LoginPage = () => {
 
       <Button
         type="submit"
-        className="border mt-4 bg-blue-500 hover:bg-blue-950 text-white cursor-pointer"
+        className="border mt-4 bg-blue-500 hover:bg-blue-950 text-white cursor-pointer flex items-center justify-center gap-2"
+        disabled={isLoading}
       >
-        Log In
+        {isLoading ? (
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+        ) : (
+          "Log In"
+        )}
       </Button>
 
       <Link href="/forgot-password">
