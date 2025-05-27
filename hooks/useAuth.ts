@@ -15,7 +15,13 @@ export const useAuth = () => {
       await login(formData, reset);
 
       reset();
-    } catch {}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.validationErrors) {
+        throw error.validationErrors;
+      }
+      throw error;
+    }
   };
 
   const login = async (formData: FormData, reset: () => void) => {
@@ -23,15 +29,18 @@ export const useAuth = () => {
       const response = await axiosInstance.post("/auth/login", formData);
 
       const { token } = response.data;
-
       setToken("token", token);
-
       await fetchUser();
 
       router.push(Route.DASHBOARD_PAGE);
-
       reset();
-    } catch {}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.validationErrors) {
+        throw error.validationErrors;
+      }
+      throw error;
+    }
   };
 
   const logout = async () => {
@@ -50,7 +59,7 @@ export const useAuth = () => {
     try {
       const response = await axiosInstance.get("/auth/user");
 
-      const user = response.data.user;
+      const user = response.data;
 
       if (user.email_verified_at) {
         setUserInStore(user);
@@ -72,18 +81,18 @@ export const useAuth = () => {
     } catch {}
   };
 
-  const forgotPassword = async (formData : FormData) => {
+  const forgotPassword = async (formData: FormData) => {
     try {
-      await axiosInstance.post("/auth/password/forgot",formData);
+      await axiosInstance.post("/auth/password/forgot", formData);
       router.push(Route.LOGIN_PAGE);
     } catch {}
   };
 
-   const addCompany = async (formData : FormData) => {
+  const addCompany = async (formData: FormData) => {
     try {
-      await axiosInstance.post("/company",formData);
+      await axiosInstance.post("/company", formData);
       router.push(Route.DASHBOARD_PAGE);
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };

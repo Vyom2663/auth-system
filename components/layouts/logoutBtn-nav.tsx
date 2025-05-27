@@ -18,9 +18,9 @@ const LogoutBtnNav = () => {
   return (
     <div>
       <div className="flex items-center gap-4">
-        {user?.firstname && (
+        {user?.user.firstname && (
           <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white text-blue-700 font-semibold text-sm">
-            {user?.firstname.charAt(0).toUpperCase()}
+            {user?.user.firstname.charAt(0).toUpperCase()}
           </div>
         )}
         <Button

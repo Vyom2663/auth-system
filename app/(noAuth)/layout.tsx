@@ -16,7 +16,7 @@ export default async function NoAuthLayout({
 
   return (
     <>
-    <Header />
+      <Header />
       {children}
       <Footer />
     </>

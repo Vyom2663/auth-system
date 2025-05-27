@@ -1,30 +1,45 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { RegisterData } from "@/types/auth";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const RegisterPage = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<RegisterData>();
+  const { register, handleSubmit, reset } = useForm<RegisterData>();
 
   const { register: registerUser } = useAuth();
 
+  const [serverErrors, setServerErrors] = useState<
+    { field: string; message: string }[]
+  >([]);
+
+  const getServerError = (field: string) => {
+    const error = serverErrors.find((err) => err.field === field);
+    return error?.message;
+  };
+
   const onSubmit = async (data: RegisterData) => {
+    setServerErrors([]);
+
     const formData = new FormData();
-    formData.append("firstname", data.firstName);
-    formData.append("lastname", data.lastName);
+    formData.append("firstname", data.firstname);
+    formData.append("lastname", data.lastname);
     formData.append("email", data.email);
     formData.append("password", data.password);
-    formData.append("password_confirmation", data.confirmPassword);
+    formData.append("password_confirmation", data.password_confirmation);
 
-    await registerUser(formData, reset);
+    try {
+      await registerUser(formData, reset);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (Array.isArray(error)) {
+        setServerErrors(error);
+      }
+    }
   };
 
   return (
@@ -34,15 +49,13 @@ const RegisterPage = () => {
           First Name <span className="text-red-500">*</span>
         </Label>
         <Input
-          {...register("firstName", {
-            required: "First name is required",
-          })}
+          {...register("firstname")}
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your first name..."
         />
-        {errors.firstName && (
+        {getServerError("firstname") && (
           <span className="text-red-500 text-sm">
-            {errors.firstName.message}
+            {getServerError("firstname")}
           </span>
         )}
       </div>
@@ -52,15 +65,13 @@ const RegisterPage = () => {
           Last Name <span className="text-red-500">*</span>
         </Label>
         <Input
-          {...register("lastName", {
-            required: "Last name is required",
-          })}
+          {...register("lastname")}
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your last name..."
         />
-        {errors.lastName && (
+        {getServerError("lastname") && (
           <span className="text-red-500 text-sm">
-            {errors.lastName.message}
+            {getServerError("lastname")}
           </span>
         )}
       </div>
@@ -70,18 +81,14 @@ const RegisterPage = () => {
           Email <span className="text-red-500">*</span>
         </Label>
         <Input
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^\S+@\S+$/i,
-              message: "Invalid email format",
-            },
-          })}
+          {...register("email")}
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your email..."
         />
-        {errors.email && (
-          <span className="text-red-500 text-sm">{errors.email.message}</span>
+        {getServerError("email") && (
+          <span className="text-red-500 text-sm">
+            {getServerError("email")}
+          </span>
         )}
       </div>
 
@@ -91,15 +98,13 @@ const RegisterPage = () => {
         </Label>
         <Input
           type="password"
-          {...register("password", {
-            required: "Password is required",
-          })}
+          {...register("password")}
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your password"
         />
-        {errors.password && (
+        {getServerError("password") && (
           <span className="text-red-500 text-sm">
-            {errors.password.message}
+            {getServerError("password")}
           </span>
         )}
       </div>
@@ -110,17 +115,13 @@ const RegisterPage = () => {
         </Label>
         <Input
           type="password"
-          {...register("confirmPassword", {
-            required: "Please confirm your password",
-            validate: (value, formValues) =>
-              value === formValues.password || "Passwords do not match",
-          })}
+          {...register("password_confirmation")}
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Re-enter password"
         />
-        {errors.confirmPassword && (
+        {getServerError("password_confirmation") && (
           <span className="text-red-500 text-sm">
-            {errors.confirmPassword.message}
+            {getServerError("password_confirmation")}
           </span>
         )}
       </div>

@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 export default function Page() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  const { logout, resendEmail, verifyEmail } = useAuth();
+  const { resendEmail, verifyEmail } = useAuth();
 
   useEffect(() => {
     if (!token) return;
@@ -32,14 +32,6 @@ export default function Page() {
             onClick={resendEmail}
           >
             Resend Verification Link
-          </Button>
-        </div>
-        <div className="mt-4 text-center">
-          <Button
-            className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200 font-medium cursor-pointer"
-            onClick={logout}
-          >
-            Logout
           </Button>
         </div>
         <p className="mt-4 text-center text-sm text-gray-500">

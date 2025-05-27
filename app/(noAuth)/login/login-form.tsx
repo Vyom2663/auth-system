@@ -1,69 +1,75 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginData } from "@/types/auth";
 import Link from "next/link";
 
 const LoginPage = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<LoginData>();
+  const { register, handleSubmit, reset } = useForm<LoginData>();
 
   const { login: loginUser } = useAuth();
 
+  const [serverErrors, setServerErrors] = useState<
+    { field: string; message: string }[]
+  >([]);
+
   const onSubmit = async (data: LoginData) => {
+    setServerErrors([]);
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
 
-    await loginUser(formData, reset);
+    try {
+      await loginUser(formData, reset);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (Array.isArray(error)) {
+        setServerErrors(error);
+      }
+    }
+  };
+
+  const getServerError = (field: string) => {
+    const error = serverErrors.find((err) => err.field === field);
+    return error?.message;
   };
 
   return (
-    <form action="" onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col mt-4 gap-2">
         <Label className="text-xl text-gray-800">
-          Email
-          <span className="text-red-500">*</span>
+          Email <span className="text-red-500">*</span>
         </Label>
         <Input
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your email..."
-          {...register("email", {
-            required: "Email is required.",
-            pattern: {
-              value: /^\S+@\S+$/i,
-              message: "Invalid email format",
-            },
-          })}
+          {...register("email")}
         />
-        {errors.email && (
-          <span className="text-red-500 text-sm">{errors.email.message}</span>
+        {getServerError("email") && (
+          <span className="text-red-500 text-sm">
+            {getServerError("email")}
+          </span>
         )}
       </div>
 
       <div className="flex flex-col mt-4 gap-2">
         <Label className="text-xl text-gray-800">
-          Password
-          <span className="text-red-500">*</span>
+          Password <span className="text-red-500">*</span>
         </Label>
         <Input
           type="password"
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your password"
-          {...register("password", {
-            required: "Password is required.",
-          })}
+          {...register("password")}
         />
-        {errors.password && (
+        {getServerError("password") && (
           <span className="text-red-500 text-sm">
-            {errors.password.message}
+            {getServerError("password")}
           </span>
         )}
       </div>

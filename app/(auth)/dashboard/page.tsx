@@ -12,27 +12,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { SkeletonCard } from "@/app/(auth)/dashboard/skeletan-card";
 import authStore from "@/stores/user-store";
-// import { Route } from "@/types/routes";
-// import { useRouter } from "next/navigation";
-// import Loading from "@/app/loading";
 
 const Dashboard = () => {
-  // const router = useRouter();
   const userInfo = authStore((state) => state.user);
   console.log(userInfo);
-  
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   if (userInfo && !userInfo.email_verified_at) {
-  //     router.replace(Route.EMAIL_VERIFY_PAGE);
-  //   }
-  //   setLoading(false);
-  // }, [userInfo, router]);
-
-  // if(loading){
-  //   return <Loading />
-  // }
 
   return (
     <div>
@@ -42,7 +25,7 @@ const Dashboard = () => {
             <CardHeader>
               <CardTitle className="flex text-2xl font-semibold">
                 {userInfo ? (
-                  `Welcome, ${userInfo?.firstname}!`
+                  `Welcome, ${userInfo?.user?.firstname}!`
                 ) : (
                   <SkeletonCard />
                 )}
@@ -57,9 +40,9 @@ const Dashboard = () => {
                 <Label className="block text-sm font-medium text-gray-600 mb-1">
                   Name
                 </Label>
-                {userInfo?.firstname ? (
+                {userInfo?.user?.firstname ? (
                   <p className="text-gray-800 text-base font-medium">
-                    {userInfo?.firstname} {userInfo?.lastname ?? ""}
+                    {userInfo?.user?.firstname} {userInfo?.user?.lastname ?? ""}
                   </p>
                 ) : (
                   <SkeletonCard />
@@ -70,9 +53,9 @@ const Dashboard = () => {
                 <Label className="block text-sm font-medium text-gray-600 mb-1">
                   Email
                 </Label>
-                {userInfo?.email ? (
+                {userInfo?.user?.email ? (
                   <p className="text-gray-800 text-base font-medium">
-                    {userInfo?.email}
+                    {userInfo?.user.email}
                   </p>
                 ) : (
                   <SkeletonCard />

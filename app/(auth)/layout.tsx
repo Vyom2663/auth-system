@@ -22,11 +22,11 @@ export default async function AuthLayout({
     redirect("/login");
   }
 
-  if (!user.email_verified_at) {
+  if (!user.user.email_verified_at) {
   redirect("/account/verify");
   }
 
-  if(!user.company_id) {
+  if(!user.user.company_id) {
     redirect("/company");
   }
 

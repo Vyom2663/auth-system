@@ -1,5 +1,7 @@
 import { fetchUserRepository } from "@/repository/fetchUserRepository";
 import { redirect } from "next/navigation";
+import Footer from "@/components/layouts/footer-page";
+import Header from "@/components/layouts/header-page";
 
 export default async function CompanyLayout({
   children,
@@ -8,21 +10,23 @@ export default async function CompanyLayout({
 }>) {
   const user = await fetchUserRepository();
 
-  if(!user){
+  if (!user) {
     redirect("/login");
   }
 
-  if (!user.email_verified_at) {
-  redirect("/account/verify");
+  if (!user.user.email_verified_at) {
+    redirect("/account/verify");
   }
 
-  if (user?.company_id) {
+  if (user?.user.company_id) {
     redirect("/dashboard");
   }
 
   return (
     <>
+      <Header />
       {children}
+      <Footer />
     </>
   );
 }
