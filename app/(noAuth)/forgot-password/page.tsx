@@ -41,6 +41,7 @@ export default function ForgotPassword() {
               <Input
                 type="email"
                 id="email"
+                placeholder="Enter email..."
                 {...register("email", {
                   required: "Email is required",
                   pattern: {

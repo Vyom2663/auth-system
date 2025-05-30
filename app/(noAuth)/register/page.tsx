@@ -15,7 +15,7 @@ const Page = () => {
                 Sign up to portal
               </h1>
 
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 border-b-2 pb-4">
                 Are a user?
                 <Link href="/login">
                   <span className="text-black font-semibold dark:text-white dark:hover:text-blue-500 hover:text-blue-500 duration-300">

@@ -30,6 +30,11 @@ export type ForgotPasswordData = {
   email: string;
 };
 
+export type ResetPasswordData = {
+  password: string;
+  password_confirmation:string;
+}
+
 export type CompanyData = {
   company_name: string;
   email: string;
@@ -39,5 +44,5 @@ export type CompanyData = {
   country: string;
   pincode: string;
   address: string;
-  logo: FileList;
+  logo: FileList | null;
 };

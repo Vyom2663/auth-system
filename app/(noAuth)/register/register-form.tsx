@@ -19,7 +19,7 @@ const RegisterPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const getServerError = (field: string) => {
+  const getError = (field: string) => {
     const error = serverErrors.find((err) => err.field === field);
     return error?.message;
   };
@@ -57,9 +57,9 @@ const RegisterPage = () => {
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your first name..."
         />
-        {getServerError("firstname") && (
+        {getError("firstname") && (
           <span className="text-red-500 text-sm">
-            {getServerError("firstname")}
+            {getError("firstname")}
           </span>
         )}
       </div>
@@ -73,9 +73,9 @@ const RegisterPage = () => {
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your last name..."
         />
-        {getServerError("lastname") && (
+        {getError("lastname") && (
           <span className="text-red-500 text-sm">
-            {getServerError("lastname")}
+            {getError("lastname")}
           </span>
         )}
       </div>
@@ -89,9 +89,9 @@ const RegisterPage = () => {
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your email..."
         />
-        {getServerError("email") && (
+        {getError("email") && (
           <span className="text-red-500 text-sm">
-            {getServerError("email")}
+            {getError("email")}
           </span>
         )}
       </div>
@@ -106,9 +106,9 @@ const RegisterPage = () => {
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Enter your password"
         />
-        {getServerError("password") && (
+        {getError("password") && (
           <span className="text-red-500 text-sm">
-            {getServerError("password")}
+            {getError("password")}
           </span>
         )}
       </div>
@@ -123,9 +123,9 @@ const RegisterPage = () => {
           className="p-5 border border-blue-950 focus:outline-none focus:border-amber-400"
           placeholder="Re-enter password"
         />
-        {getServerError("password_confirmation") && (
+        {getError("password_confirmation") && (
           <span className="text-red-500 text-sm">
-            {getServerError("password_confirmation")}
+            {getError("password_confirmation")}
           </span>
         )}
       </div>

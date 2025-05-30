@@ -38,7 +38,7 @@ const LoginPage = () => {
     setIsLoading(false);
   };
 
-  const getServerError = (field: string) => {
+  const getError = (field: string) => {
     const error = serverErrors.find((err) => err.field === field);
     return error?.message;
   };
@@ -54,9 +54,9 @@ const LoginPage = () => {
           placeholder="Enter your email..."
           {...register("email")}
         />
-        {getServerError("email") && (
+        {getError("email") && (
           <span className="text-red-500 text-sm">
-            {getServerError("email")}
+            {getError("email")}
           </span>
         )}
       </div>
@@ -71,9 +71,9 @@ const LoginPage = () => {
           placeholder="Enter your password"
           {...register("password")}
         />
-        {getServerError("password") && (
+        {getError("password") && (
           <span className="text-red-500 text-sm">
-            {getServerError("password")}
+            {getError("password")}
           </span>
         )}
       </div>

@@ -6,11 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { CompanyData } from "@/types/auth";
-import { useState } from "react";
+import Image from "next/image";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function CompanyForm() {
-  const { register, handleSubmit } = useForm<CompanyData>();
+  const { register, handleSubmit, setValue } = useForm<CompanyData>();
 
   const [serverErrors, setServerErrors] = useState<
     { field: string; message: string }[]
@@ -18,7 +19,11 @@ export default function CompanyForm() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const getServerError = (field: string) => {
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const getError = (field: string) => {
     const error = serverErrors.find((err) => err.field === field);
     return error?.message;
   };
@@ -54,12 +59,24 @@ export default function CompanyForm() {
     setIsLoading(false);
   };
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      setLogoPreview(URL.createObjectURL(file));
+      setValue("logo", e.target.files);
+    } else {
+      setLogoPreview(null);
+      setValue("logo", null);
+    }
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="mx-20 mt-10 bg-white p-8 rounded-2xl shadow-lg space-y-8"
     >
-      <h2 className="text-3xl font-bold text-gray-800 border-b pb-4">
+      <h2 className="text-3xl font-bold text-gray-800 border-b-2 pb-4">
         Company Details
       </h2>
 
@@ -70,13 +87,12 @@ export default function CompanyForm() {
           </Label>
           <Input
             type="text"
+            placeholder="Enter Company Name..."
             {...register("company_name")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("company_name") && (
-            <p className="text-red-500 text-sm">
-              {getServerError("company_name")}
-            </p>
+          {getError("company_name") && (
+            <p className="text-red-500 text-sm">{getError("company_name")}</p>
           )}
         </div>
 
@@ -84,11 +100,12 @@ export default function CompanyForm() {
           <Label className="block text-sm font-semibold mb-1">Email</Label>
           <Input
             type="email"
+            placeholder="Enter Email..."
             {...register("email")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("email") && (
-            <p className="text-red-500 text-sm">{getServerError("email")}</p>
+          {getError("email") && (
+            <p className="text-red-500 text-sm">{getError("email")}</p>
           )}
         </div>
 
@@ -98,13 +115,12 @@ export default function CompanyForm() {
           </Label>
           <Input
             type="tel"
+            placeholder="Enter Contact Number..."
             {...register("contact_no")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("contact_no") && (
-            <p className="text-red-500 text-sm">
-              {getServerError("contact_no")}
-            </p>
+          {getError("contact_no") && (
+            <p className="text-red-500 text-sm">{getError("contact_no")}</p>
           )}
         </div>
 
@@ -112,11 +128,12 @@ export default function CompanyForm() {
           <Label className="block text-sm font-semibold mb-1">City</Label>
           <Input
             type="text"
+            placeholder="Enter City..."
             {...register("city")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("city") && (
-            <p className="text-red-500 text-sm">{getServerError("city")}</p>
+          {getError("city") && (
+            <p className="text-red-500 text-sm">{getError("city")}</p>
           )}
         </div>
 
@@ -124,11 +141,12 @@ export default function CompanyForm() {
           <Label className="block text-sm font-semibold mb-1">State</Label>
           <Input
             type="text"
+            placeholder="Enter State..."
             {...register("state")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("state") && (
-            <p className="text-red-500 text-sm">{getServerError("state")}</p>
+          {getError("state") && (
+            <p className="text-red-500 text-sm">{getError("state")}</p>
           )}
         </div>
 
@@ -136,11 +154,12 @@ export default function CompanyForm() {
           <Label className="block text-sm font-semibold mb-1">Country</Label>
           <Input
             type="text"
+            placeholder="Enter Country..."
             {...register("country")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("country") && (
-            <p className="text-red-500 text-sm">{getServerError("country")}</p>
+          {getError("country") && (
+            <p className="text-red-500 text-sm">{getError("country")}</p>
           )}
         </div>
 
@@ -148,11 +167,12 @@ export default function CompanyForm() {
           <Label className="block text-sm font-semibold mb-1">Pincode</Label>
           <Input
             type="text"
+            placeholder="Enter Pincode..."
             {...register("pincode")}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {getServerError("pincode") && (
-            <p className="text-red-500 text-sm">{getServerError("pincode")}</p>
+          {getError("pincode") && (
+            <p className="text-red-500 text-sm">{getError("pincode")}</p>
           )}
         </div>
       </div>
@@ -161,11 +181,12 @@ export default function CompanyForm() {
         <Label className="block text-sm font-semibold mb-1">Address</Label>
         <Textarea
           rows={3}
+          placeholder="Enter Address..."
           {...register("address")}
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        {getServerError("address") && (
-          <p className="text-red-500 text-sm">{getServerError("address")}</p>
+        {getError("address") && (
+          <p className="text-red-500 text-sm">{getError("address")}</p>
         )}
       </div>
 
@@ -175,12 +196,40 @@ export default function CompanyForm() {
           type="file"
           accept="image/*"
           {...register("logo")}
+          ref={fileInputRef}
+          onChange={handleLogoChange}
           className="block w-full text-sm text-gray-700 file:mr-4 file:py-1 file:px-4
-                     file:rounded-md file:border-0 file:text-sm file:font-semibold
-                     file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+               file:rounded-md file:border-0 file:text-sm file:font-semibold
+               file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
         />
-        {getServerError("logo") && (
-          <p className="text-red-500 text-sm">{getServerError("logo")}</p>
+        {logoPreview && (
+          <div className="relative mt-4 inline-block">
+            <Image
+              src={logoPreview}
+              width={100}
+              height={100}
+              alt="Logo Preview"
+              className="rounded-lg w-45 border border-gray-300 shadow-sm object-cover"
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="absolute top-1 right-1 bg-gray-200 text-red-600 hover:bg-red-500 hover:text-white p-1 rounded-full shadow cursor-pointer"
+              onClick={() => {
+                setLogoPreview(null);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
+                }
+                setValue("logo", null);
+              }}
+            >
+              ✕
+            </Button>
+          </div>
+        )}
+        {getError("logo") && (
+          <p className="text-red-500 text-sm mt-1">{getError("logo")}</p>
         )}
       </div>
 
@@ -193,7 +242,7 @@ export default function CompanyForm() {
           {isLoading ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            "Submit"
+            "Add Company"
           )}
         </Button>
       </div>

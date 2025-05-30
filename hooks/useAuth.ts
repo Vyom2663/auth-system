@@ -88,6 +88,13 @@ export const useAuth = () => {
     } catch {}
   };
 
+  const resetPassword = async (formData: FormData, url: string) => {
+    try {
+      await axiosInstance.post(url, formData);
+      router.push(Route.LOGIN_PAGE);
+    } catch {}
+  };
+
   const addCompany = async (formData: FormData) => {
     try {
       await axiosInstance.post("/company", formData);
@@ -109,6 +116,7 @@ export const useAuth = () => {
     verifyEmail,
     resendEmail,
     forgotPassword,
+    resetPassword,
     addCompany,
   };
 };
