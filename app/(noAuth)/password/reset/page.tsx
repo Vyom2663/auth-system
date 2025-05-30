@@ -22,8 +22,11 @@ const ForgetPasswordForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    watch,
+    formState: { errors, isSubmitting },
   } = useForm<ResetPasswordData>();
+
+  const password = watch("password");
 
   const onSubmit = async (data: ResetPasswordData) => {
     const formData = new FormData();
@@ -51,9 +54,16 @@ const ForgetPasswordForm = () => {
             <Input
               type="password"
               placeholder="Enter new password"
-              {...register("password")}
+              {...register("password", {
+                required: "Password is required",
+              })}
               className="w-full border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             />
+            {errors.password && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -63,9 +73,18 @@ const ForgetPasswordForm = () => {
             <Input
               type="password"
               placeholder="Confirm new password"
-              {...register("password_confirmation")}
+              {...register("password_confirmation", {
+                required: "Please confirm your password",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
               className="w-full border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             />
+            {errors.password_confirmation && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.password_confirmation.message}
+              </p>
+            )}
           </div>
 
           <Button
