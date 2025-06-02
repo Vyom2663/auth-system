@@ -15,7 +15,8 @@ const routes: {
 } = {
   "/": { title: "Dashboard" },
   "/dashboard": { title: "Dashboard" },
-  "/email-verify": { title: "Resend Email" },
+  "/admin": { title: "List" },
+  "/admin/add-data": { title: "Employee Add" },
 //   "/personal-information/basic-details": {
 //     title: "Basic Details",
 //     parent: "Personal Information",

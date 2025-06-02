@@ -24,14 +24,14 @@ import CompanyDetailsNav from "./company-details-nav"
 const data = {
   navMain: [
     {
-      title: "Home",
-      url: "/home",
-      icon: SquareTerminal,
-    },
-    {
       title: "Dashboard",
       url: "/dashboard",
       icon: Bot,
+    },
+    {
+      title: "Admin",
+      url: "/admin",
+      icon: SquareTerminal,
     },
   ],
 }
