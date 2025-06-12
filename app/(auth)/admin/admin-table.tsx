@@ -15,12 +15,17 @@ import { useEmployee } from "@/hooks/useEmployee";
 import { Button } from "@/components/ui/button";
 import { AdminData } from "@/types/employee";
 import TableLoading from "./table-loading";
+import Link from "next/link";
+import DeleteConfirmationDialog from "../delete-dialog";
 
 const AdminTable = ({ refreshFlag }: { refreshFlag: boolean }) => {
   const [admins, setAdmins] = useState<AdminData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedAdminId, setSelectedAdminId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const { getAdmin } = useEmployee();
+  const { getAdmin, deleteAdmin } = useEmployee();
 
   const fetchAdmins = useCallback(async () => {
     setLoading(true);
@@ -28,6 +33,20 @@ const AdminTable = ({ refreshFlag }: { refreshFlag: boolean }) => {
     setAdmins(data);
     setLoading(false);
   }, [getAdmin]);
+
+  const handleDelete = async () => {
+    if (!selectedAdminId) return;
+    setIsDeleting(true);
+    try {
+      await deleteAdmin(selectedAdminId);
+      await fetchAdmins();
+    } catch {
+    } finally {
+      setIsDeleting(false);
+      setIsDialogOpen(false);
+      setSelectedAdminId(null);
+    }
+  };
 
   useEffect(() => {
     fetchAdmins();
@@ -74,10 +93,18 @@ const AdminTable = ({ refreshFlag }: { refreshFlag: boolean }) => {
                   </TableCell>
                   <TableCell className="px-6 py-3 text-center">
                     <div className="flex justify-center gap-3">
-                      <Button className="p-2 bg-transparent hover:bg-blue-100 rounded-md">
-                        <Pencil className="w-5 h-5 text-blue-600" />
-                      </Button>
-                      <Button className="p-2 bg-transparent hover:bg-red-100 rounded-md">
+                      <Link href={`/admin/update-data/${admin.id}`}>
+                        <Button className="p-2 bg-transparent hover:bg-blue-100 rounded-md cursor-pointer">
+                          <Pencil className="w-5 h-5 text-blue-600" />
+                        </Button>
+                      </Link>
+                      <Button
+                        className="p-2 bg-transparent hover:bg-red-100 rounded-md cursor-pointer"
+                        onClick={() => {
+                          setSelectedAdminId(admin.id);
+                          setIsDialogOpen(true);
+                        }}
+                      >
                         <Trash2 className="w-5 h-5 text-red-600" />
                       </Button>
                     </div>
@@ -88,6 +115,16 @@ const AdminTable = ({ refreshFlag }: { refreshFlag: boolean }) => {
           </TableBody>
         </Table>
       </div>
+
+      <DeleteConfirmationDialog
+        isOpen={isDialogOpen}
+        onClose={() => {
+          setIsDialogOpen(false);
+          setSelectedAdminId(null);
+        }}
+        onConfirm={handleDelete}
+        isLoading={isDeleting}
+      />
     </div>
   );
 };
